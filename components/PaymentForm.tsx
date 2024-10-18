@@ -176,7 +176,7 @@ function PaymentForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-orange-500 px-4 py-4 text-base font-semibold text-white transition-all duration-200 hover:bg-orange-600 focus:bg-orange-600 focus:outline-none"
+                  className="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-black px-4 py-4 text-base font-semibold text-white transition-all duration-200 hover:bg-gray-800 focus:bg-gray-800 focus:outline-none"
                 >
                   {loading ? "Processing.." : "Proceed With Payment"}
                 </button>
