@@ -106,7 +106,7 @@ function PaymentForm() {
   
 
   return (
-    <div className="lg:pl-12">
+        <div className="lg:pl-12">
       <div className="overflow-hidden rounded-md bg-white">
         <div className="p-6 sm:p-10">
           <p className="mt-4 text-base text-gray-600">
@@ -129,7 +129,7 @@ function PaymentForm() {
                       })
                     }
                     placeholder="John Doe"
-                    className="block w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-black placeholder-gray-500 transition-all duration-200 focus:border-orange-500 focus:ring focus:ring-orange-200 focus:outline-none"
+                    className="block w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-black placeholder-gray-500 transition-all duration-200 focus:border-gray-500 focus:ring focus:ring-gray-200 focus:outline-none"
                   />
                 </div>
               </div>
@@ -149,7 +149,7 @@ function PaymentForm() {
                       })
                     }
                     placeholder="Enter Mpesa phone number"
-                    className="block w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-black placeholder-gray-500 transition-all duration-200 focus:border-orange-500 focus:ring focus:ring-orange-200 focus:outline-none"
+                    className="block w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-black placeholder-gray-500 transition-all duration-200 focus:border-gray-500 focus:ring focus:ring-gray-200 focus:outline-none"
                   />
                 </div>
               </div>
@@ -168,7 +168,7 @@ function PaymentForm() {
                       })
                     }
                     placeholder="Enter amount"
-                    className="block w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-black placeholder-gray-500 transition-all duration-200 focus:border-orange-500 focus:ring focus:ring-orange-200 focus:outline-none"
+                    className="block w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-black placeholder-gray-500 transition-all duration-200 focus:border-gray-500 focus:ring focus:ring-gray-200 focus:outline-none"
                   />
                 </div>
               </div>
@@ -195,6 +195,7 @@ function PaymentForm() {
         ) : null}
       </>
     </div>
+
   );
 }
 
