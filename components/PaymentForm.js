@@ -7,27 +7,21 @@ import { stkPushQuery } from "../actions/stkPushQuery";
 import PaymentSuccess from "./Success";
 import STKPushQueryLoading from "./StkQueryLoading";
 
-interface dataFromForm {
-  mpesa_phone: string;
-  name: string;
-  amount: number;
-}
-
 const kenyanPhoneNumberRegex =
   /^(07\d{8}|01\d{8}|2547\d{8}|2541\d{8}|\+2547\d{8}|\+2541\d{8})$/;
 
 function PaymentForm() {
-  const [dataFromForm, setDataFromForm] = useState<dataFromForm>({
+  const [dataFromForm, setDataFromForm] = useState({
     mpesa_phone: "",
     name: "",
     amount: 0,
   });
-  const [loading, setLoading] = useState<boolean>(false);
-  const [success, setSuccess] = useState<boolean>(false);
-  const [stkQueryLoading, setStkQueryLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [stkQueryLoading, setStkQueryLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const stkPushQueryWithIntervals = (CheckoutRequestID: string) => {
+  const stkPushQueryWithIntervals = (CheckoutRequestID) => {
     let reqcount = 0;
     const timer = setInterval(async () => {
       reqcount += 1;
@@ -44,19 +38,19 @@ function PaymentForm() {
 
       if (error) {
         if (error instanceof AxiosError) {
-            // Now TypeScript knows that error is an AxiosError
-            if (error.response && error.response.data.errorCode !== "500.001.1001") {
-                setStkQueryLoading(false);
-                setLoading(false);
-                setErrorMessage(error.response.data.errorMessage);
-            }
-        } else {
-            // Handle other types of errors if needed
+          // Now TypeScript knows that error is an AxiosError
+          if (error.response && error.response.data.errorCode !== "500.001.1001") {
             setStkQueryLoading(false);
             setLoading(false);
-            setErrorMessage("An unknown error occurred."); // Or any other default message
+            setErrorMessage(error.response.data.errorMessage);
+          }
+        } else {
+          // Handle other types of errors if needed
+          setStkQueryLoading(false);
+          setLoading(false);
+          setErrorMessage("An unknown error occurred.");
         }
-    }
+      }
 
       if (data) {
         if (data.ResultCode === "0") {
@@ -74,7 +68,7 @@ function PaymentForm() {
     }, 2000);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
   
@@ -103,10 +97,9 @@ function PaymentForm() {
       console.error("Error in sending STK Push:", error); // Consider more user-friendly error handling
     }
   };
-  
 
   return (
-        <div className="lg:pl-12">
+    <div className="lg:pl-12">
       <div className="overflow-hidden rounded-md bg-white">
         <div className="p-6 sm:p-10">
           <p className="mt-4 text-base text-gray-600">
@@ -195,7 +188,6 @@ function PaymentForm() {
         ) : null}
       </>
     </div>
-
   );
 }
 

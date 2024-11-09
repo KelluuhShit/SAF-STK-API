@@ -2,23 +2,16 @@
 
 import axios from "axios";
 
-interface Params {
-  mpesa_phone: string; // Update to reflect the property name from your form
-  name: string;
-  amount: number;
-}
-
-export const sendStkPush = async (body: Params) => {
+export const stkPushQuery = async (reqId) => {
   const mpesaEnv = process.env.MPESA_ENVIRONMENT;
   const MPESA_BASE_URL =
     mpesaEnv === "live"
       ? "https://api.safaricom.co.ke"
       : "https://sandbox.safaricom.co.ke";
 
-  const { mpesa_phone: phoneNumber, amount, name } = body; // Destructure with the new property name
   try {
-    // Generate authorization token
-    const auth: string = Buffer.from(
+    // Generate token
+    const auth = Buffer.from(
       `${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`
     ).toString("base64");
 
@@ -33,10 +26,6 @@ export const sendStkPush = async (body: Params) => {
 
     const token = resp.data.access_token;
 
-    const cleanedNumber = phoneNumber.replace(/\D/g, "");
-
-    const formattedPhone = `254${cleanedNumber.slice(-9)}`;
-
     const date = new Date();
     const timestamp =
       date.getFullYear() +
@@ -46,24 +35,17 @@ export const sendStkPush = async (body: Params) => {
       ("0" + date.getMinutes()).slice(-2) +
       ("0" + date.getSeconds()).slice(-2);
 
-    const password: string = Buffer.from(
-      process.env.MPESA_SHORTCODE! + process.env.MPESA_PASSKEY + timestamp
+    const password = Buffer.from(
+      process.env.MPESA_SHORTCODE + process.env.MPESA_PASSKEY + timestamp
     ).toString("base64");
 
     const response = await axios.post(
-      `${MPESA_BASE_URL}/mpesa/stkpush/v1/processrequest`,
+      `${MPESA_BASE_URL}/mpesa/stkpushquery/v1/query`,
       {
         BusinessShortCode: process.env.MPESA_SHORTCODE,
         Password: password,
         Timestamp: timestamp,
-        TransactionType: "CustomerPayBillOnline", //CustomerBuyGoodsOnline - for till
-        Amount: amount,
-        PartyA: formattedPhone,
-        PartyB: process.env.MPESA_SHORTCODE, //till number for tills
-        PhoneNumber: formattedPhone,
-        CallBackURL: "https://mydomain.com/callback-url-path",
-        AccountReference: name, // You might want to use name instead of phoneNumber here
-        TransactionDesc: "anything here",
+        CheckoutRequestID: reqId,
       },
       {
         headers: {
@@ -71,12 +53,17 @@ export const sendStkPush = async (body: Params) => {
         },
       }
     );
+
     return { data: response.data };
   } catch (error) {
+    // Handle known error types
     if (error instanceof Error) {
-      console.log(error);
-      return { error: error.message };
+      return { error };
+    } else {
+      // Handle unknown errors
+      return {
+        error: new Error("An unknown error occurred"),
+      };
     }
-    return { error: "something wrong happened" };
   }
 };

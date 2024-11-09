@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function POST(request) {
   const data = await request.json();
 
   if (!data.Body.stkCallback.CallbackMetadata) {
@@ -14,20 +14,19 @@ export async function POST(request: NextRequest) {
 
   // Use the defined type instead of 'any' here
   const amountObj = body.Item.find(
-    (obj: { Name: string; Value: string | number }) => obj.Name === "Amount"
+    (obj) => obj.Name === "Amount"
   );
   const amount = amountObj?.Value;
 
   // Mpesa code
   const codeObj = body.Item.find(
-    (obj: { Name: string; Value: string | number }) =>
-      obj.Name === "MpesaReceiptNumber"
+    (obj) => obj.Name === "MpesaReceiptNumber"
   );
   const mpesaCode = codeObj?.Value;
 
   // Phone number (in recent implementations, it may be hashed)
   const phoneNumberObj = body.Item.find(
-    (obj: { Name: string; Value: string | number }) => obj.Name === "PhoneNumber"
+    (obj) => obj.Name === "PhoneNumber"
   );
   const phoneNumber = phoneNumberObj?.Value?.toString();
 
